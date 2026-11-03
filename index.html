@@ -655,7 +655,8 @@ function cabinBlocks(){
 }
 function cabinAfter(my, instant){
   setTimeout(()=>{ if(my!==run) return; const g=$("#gen"); if(!g) return; g.classList.add("done");
-    g.insertAdjacentHTML("afterend", `<div class="blk in">${ACTS}</div>`); updDown(); }, instant ? 7000 : 6500);
+    g.insertAdjacentHTML("afterend", `<div class="blk in">${ACTS}</div>`);
+    const w=document.querySelector('[data-anchor="ad-airbnb"] .why'); if(w) w.textContent="Stays like the one you imagined"; updDown(); }, instant ? 7000 : 6500);
 }
 
 const CHATS = {
