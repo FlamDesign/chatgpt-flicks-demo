@@ -187,6 +187,7 @@ body:not(.chat) .foot{display:none}
 /* ---------- more ad formats ---------- */
 .ans ul{margin:0 0 16px 22px}
 .ans li{margin:5px 0}
+img.lg.fav{object-fit:contain;background:#fff;box-shadow:inset 0 0 0 1px var(--line)}
 .lg{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;color:#fff;font-size:10px;font-weight:700;letter-spacing:.02em}
 .shop{height:36px;padding:0 16px;border-radius:999px;background:#0d0d0d;color:#fff;font-size:14px;font-weight:500;white-space:nowrap}
 .shop:hover{background:#2b2b2b}
@@ -217,7 +218,7 @@ body:not(.chat) .foot{display:none}
 .chips button:hover{background:#f3f3f3}
 .gen{position:relative;width:min(100%,420px);aspect-ratio:1/1;border-radius:16px;overflow:hidden;background:#ececec;margin:0 0 18px}
 .gen .art{position:absolute;inset:0;filter:blur(26px) saturate(.6);opacity:.55;transform:scale(1.12);transition:filter 1.2s ease,opacity 1.2s ease,transform 1.2s ease}
-.gen .art svg{width:100%;height:100%;display:block}
+.gen .art img{width:100%;height:100%;object-fit:cover;display:block}
 .gen.done .art{filter:none;opacity:1;transform:none}
 .gen .gl{position:absolute;left:14px;bottom:12px;display:flex;align-items:center;gap:8px;font-size:14px;color:#3d3d3d;background:rgba(255,255,255,.75);border-radius:999px;padding:5px 12px 5px 8px;transition:opacity .4s}
 .gen.done .gl{opacity:0}
@@ -502,6 +503,8 @@ const ACTS=`<div class="acts">
     <button class="ibtn" aria-label="More">${DOTS}</button>
   </div>`;
 const LOGO = (txt,bg) => `<span class="lg" style="background:${bg}">${txt}</span>`;
+// Real brand icon; falls back to a letter tile if it cannot load.
+const FAV = (domain,txt,bg) => `<img class="lg fav" src="https://www.google.com/s2/favicons?domain=${domain}&sz=128" alt="" onerror="this.outerHTML=LOGO('${txt}','${bg}')">`;
 function adHead(logo, name, href){
   return `<div class="adh">
       <a class="adv" href="${href}" target="_blank" rel="noopener">${logo}${name}</a>
@@ -574,7 +577,7 @@ function jacketBlocks(){
     ACTS,
     `<div class="adu" data-anchor="ad-pata">
       <p class="why">For fall hiking layers, here's an option to consider.</p>
-      ${adHead(LOGO("P","#1d2a3a"),"Patagonia",BRANDS.pata.url)}
+      ${adHead(FAV("patagonia.com","P","#1d2a3a"),"Patagonia",BRANDS.pata.url)}
       <div class="spa">
         <div class="spa-m">${flickHost("ad-pata","pata")}</div>
         <div class="spa-t">
@@ -594,7 +597,7 @@ function cardBlocks(){
     `<p>If you fly two to four times a year, a mid-tier card with a modest fee often comes out ahead of a premium one. Tell me your yearly spend on travel and dining and I can compare a few options.</p>`,
     ACTS,
     `<div class="adu" data-anchor="ad-amex">
-      ${adHead(LOGO("AX","#016fd0"),"American Express",BRANDS.amex.url)}
+      ${adHead(FAV("americanexpress.com","AX","#016fd0"),"American Express",BRANDS.amex.url)}
       <div class="sc">
         <div class="sc-m">${flickHost("ad-amex","amex")}</div>
         <div class="sc-t">
@@ -613,7 +616,7 @@ function evBlocks(){
     `<p>Test-drive two or three back to back on the same day so you can compare ride and seat comfort directly.</p>`,
     ACTS,
     `<div class="adu" data-anchor="ad-cad">
-      ${adHead(LOGO("C","#8a1c1c"),"Cadillac",BRANDS.cad.url)}
+      ${adHead(FAV("cadillac.com","C","#111"),"Cadillac",BRANDS.cad.url)}
       <div class="agc">
         <div class="agc-t"><b>Questions about Cadillac EVs?</b><span>Ask about range, charging and which model fits your family.</span></div>
         <button class="shop" id="agBtn" onclick="openAgent()">Chat with Cadillac</button>
@@ -626,7 +629,7 @@ function openAgent(){
   const box=$("#agentBox"); if(!box || box.innerHTML.trim()) return box;
   const btn=$("#agBtn"); if(btn){ btn.textContent="Chatting with Cadillac"; btn.disabled=true; }
   box.innerHTML=`<div class="agent" data-anchor="agent-cad">
-      <div class="agh">${LOGO("C","#8a1c1c")}<b>Cadillac</b><span class="adtag">Sponsored agent</span></div>
+      <div class="agh">${FAV("cadillac.com","C","#111")}<b>Cadillac</b><span class="adtag">Sponsored agent</span></div>
       <div class="ub sm"><span>Which of your EVs fits a family?</span></div>
       <p class="agm">Here are three Cadillacs on the same drive. Tap one to switch, then explore the one you like.</p>
       <div class="agf">${flickHost("agent-cad","cad")}</div>
@@ -635,24 +638,13 @@ function openAgent(){
   mountFlicks(box); updDown();
   return box;
 }
-const CABIN_ART=`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-label="A cabin by a lake at sunset"><defs>
-<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2d2f63"/><stop offset=".55" stop-color="#e2765b"/><stop offset="1" stop-color="#f7c47c"/></linearGradient>
-<linearGradient id="lake" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9996b"/><stop offset=".5" stop-color="#7d5a73"/><stop offset="1" stop-color="#262a4f"/></linearGradient></defs>
-<rect width="400" height="262" fill="url(#sky)"/><circle cx="196" cy="236" r="34" fill="#ffd99b"/>
-<path d="M0 222 L64 168 L118 206 L182 150 L246 204 L318 166 L400 218 V264 H0Z" fill="#43334f"/>
-<path d="M0 246 L52 214 L98 240 L150 222 L206 250 L262 228 L330 246 L400 232 V264 H0Z" fill="#2d2440"/>
-<rect y="262" width="400" height="138" fill="url(#lake)"/>
-<g fill="#ffd99b" opacity=".55"><rect x="166" y="274" width="62" height="3" rx="1.5"/><rect x="176" y="290" width="42" height="3" rx="1.5"/><rect x="186" y="306" width="22" height="3" rx="1.5"/></g>
-<g fill="#1c1a2e"><path d="M300 264 L314 214 L328 264Z"/><path d="M322 264 L338 200 L354 264Z"/><path d="M40 264 L52 222 L64 264Z"/><path d="M60 264 L74 210 L88 264Z"/></g>
-<path d="M244 264 V230 L272 208 L300 230 V264Z" fill="#5a3426"/><path d="M236 232 L272 202 L308 232" fill="none" stroke="#2b1913" stroke-width="7" stroke-linejoin="round"/>
-<rect x="262" y="238" width="16" height="13" rx="1" fill="#ffcd78"/><rect x="286" y="212" width="7" height="14" fill="#2b1913"/>
-<rect x="236" y="262" width="74" height="4" fill="#2b1913"/><rect x="250" y="268" width="40" height="2" fill="#ffcd78" opacity=".5"/></svg>`;
+const CABIN_PHOTO="https://images.unsplash.com/photo-1574514342513-f739e07c81cf?auto=format&fit=crop&w=840&h=840&q=80";  // Unsplash
 function cabinBlocks(){
   return [
-    `<div class="gen" id="gen"><div class="art">${CABIN_ART}</div><div class="gl"><span class="spin"></span>Creating image</div></div>`,
+    `<div class="gen" id="gen"><div class="art"><img src="${CABIN_PHOTO}" alt="A cabin porch overlooking a lake at sunset"></div><div class="gl"><span class="spin"></span>Creating image</div></div>`,
     `<div class="adu gad" data-anchor="ad-airbnb">
       <p class="why">While your image is being created</p>
-      ${adHead(LOGO("A","#ff385c"),"Airbnb",BRANDS.airbnb.url)}
+      ${adHead(FAV("airbnb.com","A","#ff385c"),"Airbnb",BRANDS.airbnb.url)}
       <div class="wide">
         ${flickHost("ad-airbnb","airbnb","r43")}
         <div class="wide-t"><div><b>Homes with a story</b><span>Stays with a view, near the beach, or with space to play.</span></div>
@@ -671,7 +663,7 @@ const CHATS = {
   jacket:{ title:"Fall hiking jacket", q:"What jacket should I get for fall hikes on the coast?", think:"Thinking", blocks:jacketBlocks },
   card:{ title:"Travel credit cards", q:"Is a travel credit card worth it if I only fly a few times a year?", think:"Thinking", blocks:cardBlocks },
   ev:{ title:"Family EV", q:"What's a good electric SUV for a family of four?", think:"Thinking", blocks:evBlocks },
-  cabin:{ title:"Cabin image", q:"Create an image of a cozy cabin by a lake at sunset", think:"", blocks:cabinBlocks, after:cabinAfter }
+  cabin:{ title:"Cabin image", q:"Create an image of a cabin porch overlooking a lake at sunset", think:"", blocks:cabinBlocks, after:cabinAfter }
 };
 function matchChat(t){
   t=t.toLowerCase();
