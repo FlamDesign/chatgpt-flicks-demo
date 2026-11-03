@@ -695,7 +695,7 @@ function openChat(key, opt={}){
   setRecent(c.title, key); markGuide();
   thread.scrollTop=0;
   const ans=$("#ans"), blocks=c.blocks();
-  const add=h=>{ const d=document.createElement("div"); d.className="blk"; d.innerHTML=h; ans.appendChild(d); mountFlicks(d); requestAnimationFrame(()=>d.classList.add("in")); };
+  const add=h=>{ const d=document.createElement("div"); d.className="blk"; d.innerHTML=h; ans.appendChild(d); mountFlicks(d); setTimeout(()=>d.classList.add("in"),20); };
   const finish=()=>{ done=true; c.after && c.after(my, !!opt.instant); updDown(); if(opt.anchor) focusAnchor(opt.anchor); };
   if(opt.instant){ blocks.forEach(add); finish(); return; }
   if(c.think) ans.innerHTML=`<p class="thinking">${c.think}</p>`;
